@@ -1,0 +1,15 @@
+.idea
+lib
+target
+*.project
+*.iml
+bin
+.project
+src/main/webapp/WEB-INF/db.properties
+.classpath
+.settings
+src/main/webapp/files/js/messages-en.json
+nb-configuration.xml
+src/main/resources/rebel.xml
+src/main/webapp/META-INF/context.xml
+/logs
