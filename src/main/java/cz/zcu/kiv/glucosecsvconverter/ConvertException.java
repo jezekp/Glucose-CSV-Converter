@@ -1,7 +1,7 @@
 package cz.zcu.kiv.glucosecsvconverter;
 
 /***********************************************************************************************************************
- * This file is part of the Glucose-CSV-Converter project
+ * This file is part of the Glucose-CSV-CsvConverterImpl project
  * <p>
  * ==========================================
  * <p>
@@ -26,5 +26,9 @@ public class ConvertException extends Exception {
 
     public ConvertException(Exception e) {
         super(e);
+    }
+
+    public ConvertException(String message) {
+        super(message);
     }
 }

@@ -3,7 +3,7 @@ package cz.zcu.kiv.glucosecsvconverter.data;
 import java.util.List;
 
 /***********************************************************************************************************************
- * This file is part of the Glucose-CSV-Converter project
+ * This file is part of the Glucose-CSV-CsvConverterImpl project
  * <p>
  * ==========================================
  * <p>

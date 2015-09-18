@@ -1,9 +1,13 @@
-package cz.zcu.kiv.glucosecsvconverter.data;
+package cz.zcu.kiv.glucosecsvconverter;
 
-import java.util.List;
+import cz.zcu.kiv.glucosecsvconverter.data.Subject;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 /***********************************************************************************************************************
- * This file is part of the Glucose-CSV-CsvConverterImpl project
+ * This file is part of the Glucose-CSV-Converter project
  * <p>
  * ==========================================
  * <p>
@@ -22,36 +26,20 @@ import java.util.List;
  * <p>
  * **********************************************************************************************************************
  * <p>
- * TimeSegment, 2015/09/17 15:23 petr-jezek
+ * Main, 2015/09/18 09:47 petr-jezek
  **********************************************************************************************************************/
-public class TimeSegment {
+public class Main {
 
-    private Subject subject;
-    private String device;
-    private List<MeasuredValue> measuredValues;
-
-
-    public Subject getSubject() {
-        return subject;
-    }
-
-    public void setSubject(Subject subject) {
-        this.subject = subject;
-    }
-
-    public String getDevice() {
-        return device;
-    }
-
-    public void setDevice(String device) {
-        this.device = device;
-    }
-
-    public List<MeasuredValue> getMeasuredValues() {
-        return measuredValues;
-    }
-
-    public void setMeasuredValues(List<MeasuredValue> measuredValues) {
-        this.measuredValues = measuredValues;
+    public static void main(String[] args) {
+        Converter c = new CsvConverterImpl();
+        try {
+            Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 krev.csv"));
+            //Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/mgseg1.csv"));
+            System.out.println(s);
+        } catch (ConvertException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

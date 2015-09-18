@@ -1,6 +1,5 @@
 package cz.zcu.kiv.glucosecsvconverter;
 
-
 import cz.zcu.kiv.glucosecsvconverter.data.Subject;
 
 import java.io.InputStream;
@@ -25,12 +24,8 @@ import java.io.InputStream;
  * <p>
  * **********************************************************************************************************************
  * <p>
- * Converter, 2015/09/17 14:27 petr-jezek
+ * Converter, 2015/09/18 09:16 petr-jezek
  **********************************************************************************************************************/
-public class Converter {
-
-    public Subject convert(InputStream csv) throws ConvertException {
-        Subject s = new Subject();
-        return s;
-    }
+public interface Converter  {
+    public Subject convert(InputStream csv) throws ConvertException;
 }

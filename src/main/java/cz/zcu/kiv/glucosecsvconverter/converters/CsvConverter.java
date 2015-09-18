@@ -1,12 +1,14 @@
 package cz.zcu.kiv.glucosecsvconverter.converters;
 
+
 import cz.zcu.kiv.glucosecsvconverter.ConvertException;
 import cz.zcu.kiv.glucosecsvconverter.data.Subject;
 
 import java.io.InputStream;
+import java.util.List;
 
 /***********************************************************************************************************************
- * This file is part of the Glucose-CSV-Converter project
+ * This file is part of the Glucose-CSV-CsvConverterImpl project
  * <p>
  * ==========================================
  * <p>
@@ -29,5 +31,6 @@ import java.io.InputStream;
  **********************************************************************************************************************/
 public interface CsvConverter {
 
-    public Subject convert(InputStream stream) throws ConvertException;
+    public Subject convert(List<String[]> rows) throws ConvertException;
+
 }

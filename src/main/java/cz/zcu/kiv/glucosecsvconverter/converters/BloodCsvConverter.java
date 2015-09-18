@@ -9,9 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 
-
 /***********************************************************************************************************************
- * This file is part of the Glucose-CSV-CsvConverterImpl project
+ * This file is part of the Glucose-CSV-Converter project
  * <p>
  * ==========================================
  * <p>
@@ -30,19 +29,21 @@ import java.util.List;
  * <p>
  * **********************************************************************************************************************
  * <p>
- * MgsegCsvConverter, 2015/09/17 16:23 petr-jezek
+ * BloodCsvConverter, 2015/09/18 09:18 petr-jezek
  **********************************************************************************************************************/
-public class MgsegCsvConverter implements CsvConverter {
+public class BloodCsvConverter implements CsvConverter {
 
-    public static final String HEADER_VALUE = "Date";
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.mm.yyyy HH:mm:ss");
+    public static final String HEADER_VALUE = "Action";
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
+    @Override
     public Subject convert(List<String[]> rows) throws ConvertException {
         Subject subject = new Subject();
         List<TimeSegment> timeSegments = new LinkedList<>();
         subject.setTimeSegments(timeSegments);
         try {
             for (String[] line : rows) {
+
                 TimeSegment timeSegment = new TimeSegment();
                 timeSegments.add(timeSegment);
                 List<MeasuredValue> measuredValues = new LinkedList<>();
@@ -50,26 +51,15 @@ public class MgsegCsvConverter implements CsvConverter {
                 measuredValues.add(measuredValue);
                 timeSegment.setMeasuredValues(measuredValues);
                 measuredValue.setTimeSegment(timeSegment);
-                if(line.length > 1) {
-                    measuredValue.setMeasuredAt(simpleDateFormat.parse(line[0] + " " + line[1]));
-                }
-                if(line.length > 2) {
-                    String bg = line[2];
-                    if (bg != null && !bg.isEmpty()) {
-                        measuredValue.setBlood(Double.parseDouble(bg.replace(',', '.')));
-                    }
-                }
-                if(line.length > 3) {
-                    String sensor = line[3];
-                    if (sensor != null && !sensor.isEmpty()) {
-                        measuredValue.setBlood(Double.parseDouble(sensor.replace(',', '.')));
-                    }
+                measuredValue.setMeasuredAt(simpleDateFormat.parse(line[1] + " " + line[2]));
+                String blood = line[3];
+                if (blood != null && !blood.isEmpty()) {
+                    measuredValue.setBlood(Double.parseDouble(blood));
                 }
             }
-        } catch (Exception e) {
+        }catch (Exception e) {
             throw new ConvertException(e);
         }
-
         return subject;
     }
 }
