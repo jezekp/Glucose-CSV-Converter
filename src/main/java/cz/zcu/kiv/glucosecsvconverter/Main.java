@@ -33,8 +33,8 @@ public class Main {
     public static void main(String[] args) {
         Converter c = new CsvConverterImpl();
         try {
-            Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 krev.csv"));
-            //Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/mgseg1.csv"));
+            //Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 krev.csv"));
+            Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/mgseg2.csv"));
             System.out.println(s);
         } catch (ConvertException e) {
             e.printStackTrace();

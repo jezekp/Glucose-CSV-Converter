@@ -43,7 +43,6 @@ public class BloodCsvConverter implements CsvConverter {
         subject.setTimeSegments(timeSegments);
         try {
             for (String[] line : rows) {
-
                 TimeSegment timeSegment = new TimeSegment();
                 timeSegments.add(timeSegment);
                 List<MeasuredValue> measuredValues = new LinkedList<>();
