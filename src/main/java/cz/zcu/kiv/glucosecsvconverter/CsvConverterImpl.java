@@ -38,7 +38,7 @@ import java.util.List;
 public class CsvConverterImpl implements Converter {
 
     public Subject convert(InputStream csv) throws ConvertException {
-        Subject s = null;
+        Subject s;
         try {
 
             LineIterator it = IOUtils.lineIterator(csv, "UTF-8");
@@ -50,6 +50,7 @@ public class CsvConverterImpl implements Converter {
                 rows.add(row);
             }
 
+            it.close();
 
             if (rows.size() == 0) {
                 throw new ConvertException("Unsupported format");
@@ -67,7 +68,7 @@ public class CsvConverterImpl implements Converter {
     }
 
     private CsvConverter getConverter(String[] header) throws ConvertException {
-        CsvConverter converter = null;
+        CsvConverter converter;
         switch (header[0]) {
             case BloodCsvConverter.HEADER_VALUE:
                 converter = new BloodCsvConverter();
