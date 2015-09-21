@@ -35,16 +35,16 @@ public class Main {
     public static void main(String[] args) {
         Converter c = new CsvConverterImpl();
         try {
-           // Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 krev.csv"));
-         //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/mgseg1.csv"));
-          //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 4.csv"));
-            //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pacient 2.csv"));
-           //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 ist.csv"));
-            Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pacient 2.csv"));
+          //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 krev.csv"));
+          // Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/mgseg1.csv"));
+           // Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 4.csv"));
+          //    Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pacient 2.csv"));
+             Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 ist.csv"));
+            int i = 0;
             for(TimeSegment timeSegment : s.getTimeSegments()) {
                 System.out.println("------------------");
                 for(MeasuredValue mv : timeSegment.getMeasuredValues()) {
-                    System.out.println(mv.getMeasuredAt() + " blood: " + mv.getBlood() + " ist:" + mv.getIst());
+                    System.out.println(i++ + " - " + mv.getMeasuredAt() + " blood: " + mv.getBlood() + " ist:" + mv.getIst());
                 }
             }
         } catch (ConvertException e) {

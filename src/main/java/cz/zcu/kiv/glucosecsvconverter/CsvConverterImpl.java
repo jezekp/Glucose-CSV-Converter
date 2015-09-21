@@ -51,12 +51,12 @@ public class CsvConverterImpl implements Converter {
             List<String[]> rows = new LinkedList<>();
             while (it.hasNext()) {
                 String line = it.nextLine();
-                String[] row = line.split(separator);
+                String[] row = line.split(separator, -1);
                 rows.add(row);
             }
 
             it.close();
-
+System.out.println(" -------- " + rows.size());
             if (rows.size() == 0) {
                 throw new ConvertException("Unsupported format");
             }

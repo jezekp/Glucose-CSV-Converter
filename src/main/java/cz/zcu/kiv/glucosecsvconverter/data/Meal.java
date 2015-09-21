@@ -29,6 +29,7 @@ public class Meal {
     private Subject subject;
     private Date date;
     private String comments;
+    private double weight;
 
     public Subject getSubject() {
         return subject;
@@ -52,5 +53,13 @@ public class Meal {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public void setWeight(double weight) {
+        this.weight = weight;
     }
 }

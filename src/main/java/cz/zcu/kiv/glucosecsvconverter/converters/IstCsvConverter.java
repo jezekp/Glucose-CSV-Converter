@@ -2,6 +2,7 @@ package cz.zcu.kiv.glucosecsvconverter.converters;
 
 import cz.zcu.kiv.glucosecsvconverter.ConvertException;
 import cz.zcu.kiv.glucosecsvconverter.Converter;
+import cz.zcu.kiv.glucosecsvconverter.data.Meal;
 import cz.zcu.kiv.glucosecsvconverter.data.MeasuredValue;
 import cz.zcu.kiv.glucosecsvconverter.data.Subject;
 import cz.zcu.kiv.glucosecsvconverter.data.TimeSegment;
@@ -43,24 +44,24 @@ public class IstCsvConverter implements CsvConverter {
         boolean firstRun = true;
         Subject subject = new Subject();
         String[] name = rows.get(0);
-        if(name != null) {
+        if (name != null) {
             subject.setSurname(name[0]);
             subject.setGivenName(name[1]);
         }
         String[] metadata = rows.get(4);
         String deviceName = null;
         if (metadata != null) {
-            deviceName = metadata[1] + " " + metadata[2] + " "+ metadata[3];
+            subject.setSex(metadata[0]);
+            deviceName = metadata[1] + " " + metadata[2] + " " + metadata[3];
         }
         List<TimeSegment> timeSegments = new LinkedList<>();
         subject.setTimeSegments(timeSegments);
-        TimeSegment timeSegment = new TimeSegment();
+        subject.setMeals(new LinkedList<>());
         List<MeasuredValue> measuredValues = new LinkedList<>();
         MeasuredValue previous = new MeasuredValue();
-        timeSegment.setMeasuredValues(measuredValues);
         try {
             for (String[] line : rows.subList(6, rows.size())) {
-                if(Utils.isNumeric(line[0]) && line.length > 3) {
+                if (Utils.isNumeric(line[0]) && line.length > 3) {
                     MeasuredValue measuredValue = new MeasuredValue();
                     measuredValue.setMeasuredAt(simpleDateFormat.parse(line[1] + " " + line[2]));
                     if (line.length > 4) {
@@ -75,13 +76,21 @@ public class IstCsvConverter implements CsvConverter {
                             measuredValue.setIst(Double.parseDouble(sensor.replace(',', '.')));
                         }
                     }
+                    String lastRow = line[line.length - 1];
+                    if (lastRow.startsWith("Meal")) {
+                        Meal meal = new Meal();
+                        meal.setDate(measuredValue.getMeasuredAt());
+                        meal.setWeight(Double.parseDouble(lastRow.split(":")[1].replaceAll("grams", "").replace(',', '.')));
+                        meal.setSubject(subject);
+                        subject.getMeals().add(meal);
+                    }
 
                     if (firstRun || Math.abs(measuredValue.getMeasuredAt().getTime() - previous.getMeasuredAt().getTime()) > Utils.SEGMENTS_DELAY) {
-
-                        timeSegment.setDevice(deviceName);
-                        timeSegments.add(timeSegment);
-                        timeSegment = new TimeSegment();
+                        TimeSegment timeSegment = new TimeSegment();
                         measuredValues = new LinkedList<>();
+                        timeSegment.setDevice(deviceName);
+                        timeSegment.setMeasuredValues(measuredValues);
+                        timeSegments.add(timeSegment);
                         measuredValue.setTimeSegment(timeSegment);
                         timeSegment.setMeasuredValues(measuredValues);
                         firstRun = false;

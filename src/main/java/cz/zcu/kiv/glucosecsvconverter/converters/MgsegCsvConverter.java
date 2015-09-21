@@ -35,22 +35,20 @@ import java.util.List;
 public class MgsegCsvConverter implements CsvConverter {
 
     public static final String HEADER_VALUE = "Date";
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.mm.yyyy HH:mm:ss");
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 
     public Subject convert(List<String[]> rows) throws ConvertException {
         boolean firstRun = true;
         Subject subject = new Subject();
         List<TimeSegment> timeSegments = new LinkedList<>();
         subject.setTimeSegments(timeSegments);
-        TimeSegment timeSegment = new TimeSegment();
+
+        subject.setTimeSegments(timeSegments);
         List<MeasuredValue> measuredValues = new LinkedList<>();
         MeasuredValue previous = new MeasuredValue();
-        timeSegment.setMeasuredValues(measuredValues);
         try {
             for (String[] line : rows) {
                 MeasuredValue measuredValue = new MeasuredValue();
-
-
                 if (line.length > 1) {
                     measuredValue.setMeasuredAt(simpleDateFormat.parse(line[0] + " " + line[1]));
                 }
@@ -69,10 +67,11 @@ public class MgsegCsvConverter implements CsvConverter {
 
 
                 if (firstRun || measuredValue.getMeasuredAt().getTime() - previous.getMeasuredAt().getTime() > Utils.SEGMENTS_DELAY) {
-                    timeSegments.add(timeSegment);
-                    timeSegment = new TimeSegment();
-                    measuredValue.setTimeSegment(timeSegment);
+                    TimeSegment timeSegment = new TimeSegment();
                     measuredValues = new LinkedList<>();
+                    timeSegment.setMeasuredValues(measuredValues);
+                    timeSegments.add(timeSegment);
+                    measuredValue.setTimeSegment(timeSegment);
                     timeSegment.setMeasuredValues(measuredValues);
                     firstRun = false;
                 }
