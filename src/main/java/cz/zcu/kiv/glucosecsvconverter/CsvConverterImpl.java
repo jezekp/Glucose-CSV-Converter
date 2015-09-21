@@ -3,10 +3,12 @@ package cz.zcu.kiv.glucosecsvconverter;
 
 import cz.zcu.kiv.glucosecsvconverter.converters.BloodCsvConverter;
 import cz.zcu.kiv.glucosecsvconverter.converters.CsvConverter;
+import cz.zcu.kiv.glucosecsvconverter.converters.FourthConverter;
 import cz.zcu.kiv.glucosecsvconverter.converters.MgsegCsvConverter;
 import cz.zcu.kiv.glucosecsvconverter.data.Subject;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
+import org.apache.commons.io.input.BOMInputStream;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,16 +39,23 @@ import java.util.List;
  **********************************************************************************************************************/
 public class CsvConverterImpl implements Converter {
 
+    @Override
     public Subject convert(InputStream csv) throws ConvertException {
+        return convert(csv, "\t|;");
+    }
+
+    public Subject convert(InputStream csv, String separator) throws ConvertException {
         Subject s;
+        //removes empty chars
+        BOMInputStream bomIn = new BOMInputStream(csv);
         try {
 
-            LineIterator it = IOUtils.lineIterator(csv, "UTF-8");
+            LineIterator it = IOUtils.lineIterator(bomIn, "UTF-8");
 
             List<String[]> rows = new LinkedList<>();
             while (it.hasNext()) {
                 String line = it.nextLine();
-                String[] row = line.split("\t|;");
+                String[] row = line.split(separator);
                 rows.add(row);
             }
 
@@ -69,12 +78,15 @@ public class CsvConverterImpl implements Converter {
 
     private CsvConverter getConverter(String[] header) throws ConvertException {
         CsvConverter converter;
-        switch (header[0]) {
+        switch (header[0].trim()) {
             case BloodCsvConverter.HEADER_VALUE:
                 converter = new BloodCsvConverter();
                 break;
             case MgsegCsvConverter.HEADER_VALUE:
                 converter = new MgsegCsvConverter();
+                break;
+            case FourthConverter.HEADER_VALUE:
+                converter = new FourthConverter();
                 break;
             default:
                 throw new ConvertException("Suitable converter does not exist");

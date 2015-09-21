@@ -1,10 +1,7 @@
-package cz.zcu.kiv.glucosecsvconverter;
+package cz.zcu.kiv.glucosecsvconverter.converters;
 
-import cz.zcu.kiv.glucosecsvconverter.data.Subject;
-
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 
 /***********************************************************************************************************************
  * This file is part of the Glucose-CSV-Converter project
@@ -26,21 +23,17 @@ import java.io.FileNotFoundException;
  * <p>
  * **********************************************************************************************************************
  * <p>
- * Main, 2015/09/18 09:47 petr-jezek
+ * Utils, 2015/09/21 09:55 petr-jezek
  **********************************************************************************************************************/
-public class Main {
+public class Utils {
 
-    public static void main(String[] args) {
-        Converter c = new CsvConverterImpl();
-        try {
-            Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 krev.csv"));
-         //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/mgseg1.csv"));
-          //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 4.csv"));
-            System.out.println(s);
-        } catch (ConvertException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public static boolean isNumeric(String str)
+    {
+        NumberFormat formatter = NumberFormat.getInstance();
+        ParsePosition pos = new ParsePosition(0);
+        formatter.parse(str, pos);
+        return str.length() == pos.getIndex();
     }
+
+    public static int SEGMENTS_DELAY =  5 * 60 * 1000;
 }

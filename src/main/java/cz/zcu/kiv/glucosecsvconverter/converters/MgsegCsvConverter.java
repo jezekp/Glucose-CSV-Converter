@@ -42,11 +42,11 @@ public class MgsegCsvConverter implements CsvConverter {
         Subject subject = new Subject();
         List<TimeSegment> timeSegments = new LinkedList<>();
         subject.setTimeSegments(timeSegments);
+        TimeSegment timeSegment = new TimeSegment();
+        List<MeasuredValue> measuredValues = new LinkedList<>();
+        MeasuredValue previous = new MeasuredValue();
+        timeSegment.setMeasuredValues(measuredValues);
         try {
-            TimeSegment timeSegment = new TimeSegment();
-            List<MeasuredValue> measuredValues = new LinkedList<>();
-            MeasuredValue previous = new MeasuredValue();
-            timeSegment.setMeasuredValues(measuredValues);
             for (String[] line : rows) {
                 MeasuredValue measuredValue = new MeasuredValue();
                 measuredValues.add(measuredValue);
@@ -69,9 +69,11 @@ public class MgsegCsvConverter implements CsvConverter {
                 }
 
 
-                if (firstRun || measuredValue.getMeasuredAt().getTime() - previous.getMeasuredAt().getTime() > 5 * 60 * 1000) {
+                if (firstRun || measuredValue.getMeasuredAt().getTime() - previous.getMeasuredAt().getTime() > Utils.SEGMENTS_DELAY) {
                     timeSegments.add(timeSegment);
                     timeSegment = new TimeSegment();
+                    measuredValues = new LinkedList<>();
+                    timeSegment.setMeasuredValues(measuredValues);
                     firstRun = false;
                 }
 

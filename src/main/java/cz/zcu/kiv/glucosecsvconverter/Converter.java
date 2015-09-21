@@ -27,5 +27,6 @@ import java.io.InputStream;
  * Converter, 2015/09/18 09:16 petr-jezek
  **********************************************************************************************************************/
 public interface Converter  {
-    public Subject convert(InputStream csv) throws ConvertException;
+    Subject convert(InputStream csv) throws ConvertException;
+    Subject convert(InputStream csv, String separator) throws ConvertException;
 }

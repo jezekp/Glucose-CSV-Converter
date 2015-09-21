@@ -31,32 +31,46 @@ import java.util.List;
  * <p>
  * FourthConverter, 2015/09/18 15:21 petr-jezek
  **********************************************************************************************************************/
-public class FourthConverter implements CsvConverter{
+public class FourthConverter implements CsvConverter {
 
     public static final String HEADER_VALUE = "PatientInfoField";
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss:SSS");
+    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     @Override
     public Subject convert(List<String[]> rows) throws ConvertException {
+        boolean firstRun = true;
         Subject subject = new Subject();
         List<TimeSegment> timeSegments = new LinkedList<>();
         subject.setTimeSegments(timeSegments);
+        TimeSegment timeSegment = new TimeSegment();
+        List<MeasuredValue> measuredValues = new LinkedList<>();
+        MeasuredValue previous = new MeasuredValue();
+        timeSegment.setMeasuredValues(measuredValues);
         try {
             for (String[] line : rows) {
-                TimeSegment timeSegment = new TimeSegment();
-                timeSegments.add(timeSegment);
-                List<MeasuredValue> measuredValues = new LinkedList<>();
                 MeasuredValue measuredValue = new MeasuredValue();
                 measuredValues.add(measuredValue);
-                timeSegment.setMeasuredValues(measuredValues);
                 measuredValue.setTimeSegment(timeSegment);
-                measuredValue.setMeasuredAt(simpleDateFormat.parse(line[1] + " " + line[2]));
-                String blood = line[3];
-                if (blood != null && !blood.isEmpty()) {
-                    measuredValue.setBlood(Double.parseDouble(blood));
+                measuredValue.setMeasuredAt(simpleDateFormat.parse(line[2]));
+               // System.out.println(measuredValue.getMeasuredAt());
+                if (line.length > 4) {
+                    String sensor = line[4];
+                    if (sensor != null && !sensor.isEmpty() && Utils.isNumeric(sensor)) {
+                        measuredValue.setIst(Double.parseDouble(sensor.replace(',', '.')));
+                    }
                 }
+                if (firstRun || measuredValue.getMeasuredAt().getTime() - previous.getMeasuredAt().getTime() > Utils.SEGMENTS_DELAY) {
+                    timeSegments.add(timeSegment);
+                    timeSegment = new TimeSegment();
+                    measuredValues = new LinkedList<>();
+                    timeSegment.setMeasuredValues(measuredValues);
+                    firstRun = false;
+                }
+
+                previous = measuredValue;
             }
-        }catch (Exception e) {
+
+        } catch (Exception e) {
             throw new ConvertException(e);
         }
         return subject;
