@@ -28,6 +28,7 @@ public class Subject {
 
     private String givenName;
     private String surname;
+    private String sex;
     private List<TimeSegment> timeSegments;
     private List<Meal> meals;
 
@@ -62,5 +63,13 @@ public class Subject {
 
     public void setMeals(List<Meal> meals) {
         this.meals = meals;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }

@@ -32,7 +32,8 @@ public class Utils {
         NumberFormat formatter = NumberFormat.getInstance();
         ParsePosition pos = new ParsePosition(0);
         formatter.parse(str, pos);
-        return str.length() == pos.getIndex();
+        boolean ret = str.length() == pos.getIndex();
+        return ret;
     }
 
     public static int SEGMENTS_DELAY =  5 * 60 * 1000;

@@ -49,8 +49,7 @@ public class MgsegCsvConverter implements CsvConverter {
         try {
             for (String[] line : rows) {
                 MeasuredValue measuredValue = new MeasuredValue();
-                measuredValues.add(measuredValue);
-                measuredValue.setTimeSegment(timeSegment);
+
 
                 if (line.length > 1) {
                     measuredValue.setMeasuredAt(simpleDateFormat.parse(line[0] + " " + line[1]));
@@ -72,11 +71,12 @@ public class MgsegCsvConverter implements CsvConverter {
                 if (firstRun || measuredValue.getMeasuredAt().getTime() - previous.getMeasuredAt().getTime() > Utils.SEGMENTS_DELAY) {
                     timeSegments.add(timeSegment);
                     timeSegment = new TimeSegment();
+                    measuredValue.setTimeSegment(timeSegment);
                     measuredValues = new LinkedList<>();
                     timeSegment.setMeasuredValues(measuredValues);
                     firstRun = false;
                 }
-
+                measuredValues.add(measuredValue);
                 previous = measuredValue;
             }
         } catch (Exception e) {

@@ -1,6 +1,8 @@
 package cz.zcu.kiv.glucosecsvconverter;
 
+import cz.zcu.kiv.glucosecsvconverter.data.MeasuredValue;
 import cz.zcu.kiv.glucosecsvconverter.data.Subject;
+import cz.zcu.kiv.glucosecsvconverter.data.TimeSegment;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
@@ -33,10 +35,18 @@ public class Main {
     public static void main(String[] args) {
         Converter c = new CsvConverterImpl();
         try {
-            Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 krev.csv"));
+           // Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 krev.csv"));
          //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/mgseg1.csv"));
           //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 4.csv"));
-            System.out.println(s);
+            //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pacient 2.csv"));
+           //  Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pac 1 ist.csv"));
+            Subject s = c.convert(new FileInputStream("/media/petr-jezek/data/Projekt_Glukoza/Data/pacient 2.csv"));
+            for(TimeSegment timeSegment : s.getTimeSegments()) {
+                System.out.println("------------------");
+                for(MeasuredValue mv : timeSegment.getMeasuredValues()) {
+                    System.out.println(mv.getMeasuredAt() + " blood: " + mv.getBlood() + " ist:" + mv.getIst());
+                }
+            }
         } catch (ConvertException e) {
             e.printStackTrace();
         } catch (FileNotFoundException e) {

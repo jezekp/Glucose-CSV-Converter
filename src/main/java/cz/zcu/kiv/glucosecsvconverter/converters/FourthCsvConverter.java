@@ -29,9 +29,9 @@ import java.util.List;
  * <p>
  * **********************************************************************************************************************
  * <p>
- * FourthConverter, 2015/09/18 15:21 petr-jezek
+ * FourthCsvConverter, 2015/09/18 15:21 petr-jezek
  **********************************************************************************************************************/
-public class FourthConverter implements CsvConverter {
+public class FourthCsvConverter implements CsvConverter {
 
     public static final String HEADER_VALUE = "PatientInfoField";
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -49,7 +49,6 @@ public class FourthConverter implements CsvConverter {
         try {
             for (String[] line : rows) {
                 MeasuredValue measuredValue = new MeasuredValue();
-                measuredValues.add(measuredValue);
                 measuredValue.setTimeSegment(timeSegment);
                 measuredValue.setMeasuredAt(simpleDateFormat.parse(line[2]));
                // System.out.println(measuredValue.getMeasuredAt());
@@ -66,7 +65,7 @@ public class FourthConverter implements CsvConverter {
                     timeSegment.setMeasuredValues(measuredValues);
                     firstRun = false;
                 }
-
+                measuredValues.add(measuredValue);
                 previous = measuredValue;
             }
 
